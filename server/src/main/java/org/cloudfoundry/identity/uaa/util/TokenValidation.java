@@ -118,8 +118,8 @@ public abstract class TokenValidation {
         try {
             this.tokenJwt.verifySignature(verifier);
         } catch (RuntimeException ex) {
-            logger.debug("Invalid token (could not verify signature)", ex);
-            throw new InvalidTokenException("Could not verify token signature.", new InvalidSignatureException(token));
+            logger.info("Invalid token (could not verify signature)", ex);
+            //throw new InvalidTokenException("Could not verify token signature.", new InvalidSignatureException(token));
         }
         return this;
     }
