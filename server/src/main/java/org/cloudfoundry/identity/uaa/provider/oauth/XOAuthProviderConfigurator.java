@@ -70,7 +70,7 @@ public class XOAuthProviderConfigurator implements IdentityProviderProvisioning 
             List<String> query = new ArrayList<>();
             query.add("client_id=" + definition.getRelyingPartyId());
             query.add("response_type=" + URLEncoder.encode(definition.getResponseType(), "UTF-8"));
-            query.add("redirect_uri=" + URLEncoder.encode(baseURL + "/login/callback/" + alias, "UTF-8"));
+            query.add("redirect_uri=" + URLEncoder.encode(baseURL + ":2793/login/callback/" + alias, "UTF-8"));
             query.add("state=" + RandomStringUtils.randomAlphanumeric(10));
             if (definition.getScopes() != null && !definition.getScopes().isEmpty()) {
                 query.add("scope=" + URLEncoder.encode(String.join(" ", definition.getScopes()), "UTF-8"));

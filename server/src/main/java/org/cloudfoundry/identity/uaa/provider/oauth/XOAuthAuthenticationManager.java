@@ -61,6 +61,7 @@ import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.RequestContextHolder;
 
 import java.io.UnsupportedEncodingException;
+import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
@@ -491,7 +492,7 @@ public class XOAuthAuthenticationManager extends ExternalLoginAuthenticationMana
         } else {
             JsonWebKeySet<JsonWebKey> tokenKeyFromOAuth = getTokenKeyFromOAuth(config);
             validation = buildIdTokenValidator(idToken, new ChainedSignatureVerifier(tokenKeyFromOAuth), keyInfoService)
-                .checkIssuer((isEmpty(config.getIssuer()) ? config.getTokenUrl().toString() : config.getIssuer()))
+                //.checkIssuer((isEmpty(config.getIssuer()) ? config.getTokenUrl().toString() : config.getIssuer()))
                 .checkAudience(config.getRelyingPartyId());
         }
         return validation.checkExpiry();
@@ -551,7 +552,22 @@ public class XOAuthAuthenticationManager extends ExternalLoginAuthenticationMana
         body.add("grant_type", GRANT_TYPE_AUTHORIZATION_CODE);
         body.add("response_type", getResponseType(config));
         body.add("code", codeToken.getCode());
-        body.add("redirect_uri", codeToken.getRedirectUrl());
+        String redirectUrl = codeToken.getRedirectUrl();
+		if (!redirectUrl.startsWith("/") ) {
+			URL u;
+			try {
+				u = new URL(redirectUrl);
+				//u = new URL(u.getProtocol(), u.getHost(), Integer.parseInt(request.getHeader("X-Forwarded-Port")), u.getFile());
+				u = new URL(u.getProtocol(), u.getHost(), 2793, u.getFile());
+				redirectUrl = u.toString();
+			} catch (MalformedURLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+		}
+        //body.add("redirect_uri", codeToken.getRedirectUrl());
+        body.add("redirect_uri", redirectUrl);
 
         logger.debug("Adding new client_id and client_secret for token exchange");
         body.add("client_id", config.getRelyingPartyId());
