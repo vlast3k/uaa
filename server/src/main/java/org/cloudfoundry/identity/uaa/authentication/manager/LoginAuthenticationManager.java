@@ -127,9 +127,9 @@ public class LoginAuthenticationManager implements AuthenticationManager, Applic
         String email = info.get("email");
         String userId = info.get("user_id")!=null?info.get("user_id"):NotANumber;
 
-        if(info.get(OriginKeys.ORIGIN)!=null && info.get(OriginKeys.ORIGIN).equals(OriginKeys.UAA)){
-            throw new BadCredentialsException("uaa origin not allowed for external login server");
-        }
+      //  if(info.get(OriginKeys.ORIGIN)!=null && info.get(OriginKeys.ORIGIN).equals(OriginKeys.UAA)){
+      //      throw new BadCredentialsException("uaa origin not allowed for external login server");
+      //  }
         String origin = info.get(OriginKeys.ORIGIN)!=null?info.get(OriginKeys.ORIGIN): OriginKeys.LOGIN_SERVER;
 
         if (name == null && email != null) {
